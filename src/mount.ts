@@ -15,7 +15,7 @@ const HIDDEN_SOURCE_CLASS = "bb-latex-source-hidden";
 const SKIP_CLOSEST =
   `pre, code, kbd, samp, script, style, textarea, .katex, .katex-display, .katex-error, .bb-latex, .${HIDDEN_SOURCE_CLASS}, [contenteditable='true']`;
 const BLOCK_CLOSEST =
-  "p, li, td, th, h1, h2, h3, h4, h5, h6, pre, blockquote, [data-markdown-preview]";
+  "a, p, li, td, th, h1, h2, h3, h4, h5, h6, pre, blockquote, [data-markdown-preview]";
 const CROSS_BLOCK = "p, h1, h2, h3, h4, h5, h6";
 const MAX_CROSS_BLOCKS = 8;
 const OBSERVE: MutationObserverInit = {
@@ -278,7 +278,7 @@ function isPlausibleCrossBlockMath(
 }
 
 function containsProtectedContent(element: Element): boolean {
-  return element.querySelector(SKIP_CLOSEST) !== null;
+  return element.querySelector(`a, ${SKIP_CLOSEST}`) !== null;
 }
 
 function elementTextWithBreaks(element: Element): string {

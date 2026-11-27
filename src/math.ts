@@ -58,6 +58,8 @@ export function isPlausibleDisplayMath(body: string): boolean {
 }
 
 export function isPlausibleParenMath(body: string): boolean {
+  // Let the scanner reach explicitly delimited math inside prose parentheses.
+  if (/(?:^|[^\\])(?:\\\\)*(?:\$|\\[([])/.test(body)) return false;
   const unwrapped = unwrapBalancedParens(body);
   if (unwrapped !== body && isPlausibleParenMath(unwrapped)) return true;
   if (isCommaSeparatedMathAtoms(body)) return true;
@@ -68,7 +70,11 @@ export function isPlausibleParenMath(body: string): boolean {
   if (/[\^{}]/.test(body)) return true;
   if (SHORT_SUBSCRIPT.test(body)) return true;
   if (/[<>]=?/.test(body) && /[A-Za-z\\]/.test(body)) return true;
-  return /[=+\-*/]/.test(body) && /[_^\\]/.test(body);
+  return (
+    /[=+\-*/]/.test(body) &&
+    /[_^\\]/.test(body) &&
+    !/\b[A-Za-z]{3,}\s+[A-Za-z]{3,}\b/.test(body)
+  );
 }
 
 export function isBareTexParagraph(text: string): boolean {
